@@ -157,11 +157,25 @@ module Msf::Payload::Stager
   end
 
   #
+  # This function is in place to allow for overriding of the stager/payload
+  # functionality on the fly (as is the case for the multi payload). This means
+  # that the correct functionality can be resolved when required, and each of
+  # actual functions that need to be invoked when the stager runs is invoked
+  # correctly based on the arch/platform of the connection that came in.
+  #
+  def resolve_stager(opts)
+    # By default, we'll return ourselves.
+    self
+  end
+
+  #
   # Transmit the associated stage.
   #
   # @param (see handle_connection_stage)
   # @return (see handle_connection_stage)
   def handle_connection(conn, opts={})
+    stager = self
+
     # If the stage should be sent over the client connection that is
     # established (which is the default), then go ahead and transmit it.
     if (stage_over_connection?)
@@ -172,20 +186,26 @@ module Msf::Payload::Stager
           uuid_raw = conn.get_once(16, 1)
           if uuid_raw
             opts[:uuid] = Msf::Payload::UUID.new({raw: uuid_raw})
+
+            # with a new uuid we might have a new set of functions
+            # to handler the staging
+            stager = resolve_stager(opts)
+            opts[:datastore] = datastore
           end
         end
       end
 
+      # still generate the stage as us
       p = generate_stage(opts)
 
       # Encode the stage if stage encoding is enabled
       begin
-        p = encode_stage(p)
+        p = stager.encode_stage(p)
       rescue ::RuntimeError
         warning_msg = "Failed to stage"
         warning_msg << " (#{conn.peerhost})"  if conn.respond_to? :peerhost
         warning_msg << ": #{$!}"
-        print_warning warning_msg
+        print_warning(warning_msg)
         if conn.respond_to? :close && !conn.closed?
           conn.close
         end
@@ -199,12 +219,12 @@ module Msf::Payload::Stager
       #
       # If we don't use an intermediate stage, then we need to prepend the
       # stage prefix, such as a tag
-      if handle_intermediate_stage(conn, p) == false
-        p = (self.stage_prefix || '') + p
+      if stager.handle_intermediate_stage(conn, p, opts) == false
+        p = (stager.stage_prefix || '') + p
       end
 
       platform = opts[:uuid] ? opts[:uuid].session_type + ' ' : nil
-      sending_msg = "Sending #{platform}#{encode_stage? ? "encoded ":""}stage"
+      sending_msg = "Sending #{platform}#{stager.encode_stage? ? "encoded ":""}stage"
       sending_msg << " (#{p.length} bytes)"
       # The connection should always have a peerhost (even if it's a
       # tunnel), but if it doesn't, erroring out here means losing the
@@ -228,7 +248,7 @@ module Msf::Payload::Stager
     end
 
     # Give the stages a chance to handle the connection
-    handle_connection_stage(conn, opts)
+    stager.handle_connection_stage(conn, opts)
   end
 
   #
@@ -249,7 +269,7 @@ module Msf::Payload::Stager
   # Gives derived classes an opportunity to alter the stage and/or
   # encapsulate its transmission.
   #
-  def handle_intermediate_stage(conn, payload)
+  def handle_intermediate_stage(conn, payload, opts={})
     false
   end
 

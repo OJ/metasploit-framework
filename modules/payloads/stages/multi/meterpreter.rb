@@ -9,7 +9,7 @@ require 'msf/base/sessions/meterpreter_options'
 
 ###
 #
-# Injects the meterpreter server DLL via the Reflective Dll Injection payload
+# Generates the meterpreter server for a given arch (on the fly)
 # along with transport related configuration.
 #
 ###
@@ -32,7 +32,8 @@ module MetasploitModule
   end
 
   def stage_payload(opts={})
-    return '' unless opts[:uuid]
+    uuid = opts[:payload_uuid] || opts[:uuid]
+    return '' unless uuid
 
     ## TODO: load the datastore "stuff" from the JSON file
     ## and wire it into opts[:datastore].
@@ -42,7 +43,7 @@ module MetasploitModule
     c = Class.new(::Msf::Payload)
     c.include(::Msf::Payload::Stager)
 
-    case opts[:uuid].platform
+    case uuid.platform
     when 'python'
       require 'msf/core/payload/python/meterpreter_loader'
       c.include(::Msf::Payload::Python::MeterpreterLoader)
@@ -57,7 +58,7 @@ module MetasploitModule
       c.include(::Msf::Payload::Php::MeterpreterLoader)
     when 'windows'
       require 'msf/core/payload/windows/meterpreter_loader'
-      if opts[:uuid].arch == ARCH_X86
+      if uuid.arch == ARCH_X86
         c.include(::Msf::Payload::Windows::MeterpreterLoader)
       else
         c.include(::Msf::Payload::Windows::MeterpreterLoader_x64)

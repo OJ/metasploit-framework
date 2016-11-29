@@ -113,7 +113,7 @@ eval($b);
 die();^
   end
 
-  def handle_intermediate_stage(conn, payload)
+  def handle_intermediate_stage(conn, payload, opts={})
     conn.put([payload.length].pack("N"))
   end
 

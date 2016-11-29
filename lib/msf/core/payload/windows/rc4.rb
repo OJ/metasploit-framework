@@ -82,7 +82,7 @@ module Payload::Windows::Rc4
     [ p.length ^ xorkey.unpack('V')[0] ].pack('V') + p
   end
 
-  def handle_intermediate_stage(_conn, _payload)
+  def handle_intermediate_stage(_conn, _payload, _opts={})
     false
   end
 

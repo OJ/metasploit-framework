@@ -56,7 +56,7 @@ module Payload::Python::BindTcp
     py_create_exec_stub(cmd)
   end
 
-  def handle_intermediate_stage(conn, payload)
+  def handle_intermediate_stage(conn, payload, opts={})
     conn.put([payload.length].pack("N"))
   end
 

@@ -107,7 +107,7 @@ module Msf::Payload::Windows
   # than a certain size.  If it is, we transmit another stager that will
   # ensure that the entire stage is read in.
   #
-  def handle_intermediate_stage(conn, payload)
+  def handle_intermediate_stage(conn, payload, opts={})
     if( self.module_info['Stager']['RequiresMidstager'] == false )
       conn.put( [ payload.length ].pack('V') )
       # returning false allows stager.rb!handle_connection() to prepend the stage_prefix if needed

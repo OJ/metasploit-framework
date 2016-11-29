@@ -8,21 +8,6 @@ require 'msf/core'
 ###
 module Msf::Payload::Multi
 
-  # TOOD: require the appropriate stuff!
-  #require 'msf/core/payload/windows/dllinject'
-  #require 'msf/core/payload/windows/exec'
-  #require 'msf/core/payload/windows/loadlibrary'
-  #require 'msf/core/payload/windows/meterpreter_loader'
-  #require 'msf/core/payload/windows/x64/meterpreter_loader'
-  #require 'msf/core/payload/windows/reflectivedllinject'
-  #require 'msf/core/payload/windows/x64/reflectivedllinject'
-
-  # TODO: figure out what to do here
-  def apply_prepends(raw)
-    ''
-  end
-
-  # TODO: figure out what to do here
   def initialize(info={})
     super(update_info(info,
       'Name'          => 'Multi-Platform Meterpreter Payload',
@@ -35,16 +20,37 @@ module Msf::Payload::Multi
       ))
   end
 
-  # TODO: figure out what to do here
-  def replace_var(raw, name, offset, pack)
-    return true
-  end
+  def resolve_stager(opts)
+    uuid = opts[:payload_uuid] || opts[:uuid]
+    if uuid
+      c = Class.new(::Msf::Payload)
+      c.include(::Msf::Payload::Stager)
 
-  # TODO: figure out what to do here
-  def handle_intermediate_stage(conn, payload)
-    return true
-  end
+      case uuid.platform
+      when 'python'
+        require 'msf/core/payload/python'
+        c.include(::Msf::Payload::Python)
+      when 'java'
+          require 'msf/core/payload/java'
+          c.include(::Msf::Payload::Java)
+      when 'android'
+        require 'msf/core/payload/android'
+        c.include(::Msf::Payload::Android)
+      when 'php'
+        require 'msf/core/payload/php'
+        c.include(::Msf::Payload::Php)
+      when 'windows'
+        require 'msf/core/payload/windows'
+        c.include(::Msf::Payload::Windows)
+      else
+        return self
+      end
 
+      c.new(self.module_info)
+    else
+      self
+    end
+  end
 end
 
 
