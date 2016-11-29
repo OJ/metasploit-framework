@@ -153,7 +153,7 @@ module Msf::Payload::Stager
     # Substitute variables in the stage
     substitute_vars(raw, stage_offsets) if (stage_offsets)
 
-    return raw
+    raw
   end
 
   #
@@ -203,7 +203,8 @@ module Msf::Payload::Stager
         p = (self.stage_prefix || '') + p
       end
 
-      sending_msg = "Sending #{encode_stage? ? "encoded ":""}stage"
+      platform = opts[:uuid] ? opts[:uuid].session_type + ' ' : nil
+      sending_msg = "Sending #{platform}#{encode_stage? ? "encoded ":""}stage"
       sending_msg << " (#{p.length} bytes)"
       # The connection should always have a peerhost (even if it's a
       # tunnel), but if it doesn't, erroring out here means losing the

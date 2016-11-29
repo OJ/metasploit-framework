@@ -68,6 +68,7 @@ module Payload::Windows::ReverseTcp
       #{asm_reverse_tcp(opts)}
       #{asm_block_recv(opts)}
     ^
+
     Metasm::Shellcode.assemble(Metasm::X86.new, combined_asm).encode_string
   end
 

@@ -23,7 +23,7 @@ module MetasploitModule
       'Name'          => 'Architecture-Independent Meterpreter Stage',
       'Description'   => 'Handle Meterpreter sessions regardless of the target arch/platform',
       'Author'        => ['OJ Reeves'],
-      'PayloadCompat' => {'Convention' => 'http https'},
+      'PayloadCompat' => {'Convention' => 'sockedi http https'},
       'License'       => MSF_LICENSE,
       'Platform'      => ['multi'],
       'Arch'          => ARCH_ALL,

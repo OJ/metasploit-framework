@@ -195,6 +195,8 @@ protected
     # If there is a parent payload, then use that in preference.
     return parent_payload.create_session(conn, opts) if (parent_payload)
 
+    uuid = opts[:payload_uuid] || opts[:uuid]
+
     # If the payload we merged in with has an associated session factory,
     # allocate a new session.
     if (self.session)
@@ -222,7 +224,7 @@ protected
       s.set_from_exploit(assoc_exploit)
 
       # Pass along any associated payload uuid if specified
-      s.payload_uuid = opts[:payload_uuid] if opts[:payload_uuid]
+      s.payload_uuid = uuid if uuid
 
       # If the session is valid, register it with the framework and
       # notify any waiters we may have.
