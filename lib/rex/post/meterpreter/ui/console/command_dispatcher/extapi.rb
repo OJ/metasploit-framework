@@ -38,7 +38,7 @@ class Console::CommandDispatcher::Extapi
   def initialize(shell)
     super
 
-    Dispatchers.each { |d| shell.enstack_dispatcher(d) }
+    Dispatchers.each { |d| shell.add_extension_dispatcher("extapi", d) }
   end
 
   #

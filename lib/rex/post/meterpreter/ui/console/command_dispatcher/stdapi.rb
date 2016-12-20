@@ -38,9 +38,7 @@ class Console::CommandDispatcher::Stdapi
   def initialize(shell)
     super
 
-    Dispatchers.each { |d|
-      shell.enstack_dispatcher(d)
-    }
+    Dispatchers.each { |d| shell.add_extension_dispatcher("stdapi", d) }
   end
 
   #

@@ -55,6 +55,7 @@ class Console::CommandDispatcher::Core
       "irb"        => "Drop into irb scripting mode",
       "use"        => "Deprecated alias for 'load'",
       "load"       => "Load one or more meterpreter extensions",
+      "unload"     => "Unload a meterpreter extension",
       "machine_id" => "Get the MSF ID of the machine attached to the session",
       "quit"       => "Terminate the meterpreter session",
       "resource"   => "Run the commands stored in a file",
@@ -979,11 +980,28 @@ class Console::CommandDispatcher::Core
 
   end
 
-  def cmd_load_help
-    print_line("Usage: load ext1 ext2 ext3 ...")
+  def cmd_unload_help
+    print_line('Usage: unload <ext name>')
     print_line
-    print_line "Loads a meterpreter extension module or modules."
-    print_line @@load_opts.usage
+    print_line('Unloads a meterpreter extension module.')
+  end
+
+  def cmd_unload(*args)
+    if args.length != 1
+      cmd_unload_help
+      return
+    end
+
+    if client.core.unload(args[0])
+      unload_extension_client(args[0])
+    end
+  end
+
+  def cmd_load_help
+    print_line('Usage: load ext1 ext2 ext3 ...')
+    print_line
+    print_line('Loads a meterpreter extension module or modules.')
+    print_line(@@load_opts.usage)
   end
 
   #
@@ -1446,6 +1464,11 @@ protected
 
   CommDispatcher = Console::CommandDispatcher
 
+  def unload_extension_client(mod)
+    self.extensions.delete(mod)
+    self.shell.remove_extension_dispatcher(mod)
+  end
+
   #
   # Loads the client extension specified in mod
   #
@@ -1486,7 +1509,7 @@ protected
     end
 
     # Enstack the dispatcher
-    self.shell.enstack_dispatcher(klass)
+    self.shell.add_extension_dispatcher(mod, klass)
 
     # Insert the module into the list of extensions
     self.extensions << mod

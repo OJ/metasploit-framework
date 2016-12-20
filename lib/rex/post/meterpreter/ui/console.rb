@@ -38,15 +38,31 @@ class Console
     # Queued commands array
     self.commands = []
 
+    # keep track of dispatchers based on name
+    self.extension_dispatchers = {}
+
     # Point the input/output handles elsewhere
     reset_ui
 
-    enstack_dispatcher(Console::CommandDispatcher::Core)
+    add_extension_dispatcher("core", Console::CommandDispatcher::Core)
 
     # Set up logging to whatever logsink 'core' is using
     if ! $dispatcher['meterpreter']
       $dispatcher['meterpreter'] = $dispatcher['core']
     end
+  end
+
+  def add_extension_dispatcher(name, dispatcher)
+    inst = enstack_dispatcher(dispatcher)
+    self.extension_dispatchers[name] = [] unless self.extension_dispatchers[name]
+    self.extension_dispatchers[name] << inst
+  end
+
+  def remove_extension_dispatcher(name)
+    self.extension_dispatchers[name].each do |d|
+      remove_dispatcher(d.name)
+    end
+    self.extension_dispatchers[name] = []
   end
 
   #
@@ -133,6 +149,7 @@ protected
 
   attr_writer :client # :nodoc:
   attr_accessor :commands # :nodoc:
+  attr_accessor :extension_dispatchers # :nodoc:
 
 end
 

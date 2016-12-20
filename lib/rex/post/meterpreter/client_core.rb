@@ -246,6 +246,14 @@ class ClientCore < Extension
     return commands
   end
 
+  def unload(mod)
+    request = Packet.create_request('core_unloadlib')
+    request.add_tlv(TLV_TYPE_STRING, mod)
+    self.client.send_request(request)
+    client.deregister_extension(mod)
+    return true
+  end
+
   #
   # Loads a meterpreter extension on the remote server instance and
   # initializes the client-side extension handlers
