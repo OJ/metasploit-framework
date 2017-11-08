@@ -830,6 +830,7 @@ private
       request.add_tlv(TLV_TYPE_TRANS_UA, opts[:ua])
 
       if transport == 'reverse_https' && opts[:cert]
+        # TODO: wire in the new cert stuff here as well
         hash = Rex::Socket::X509Certificate.get_cert_file_hash(opts[:cert])
         request.add_tlv(TLV_TYPE_TRANS_CERT_HASH, hash)
       end

@@ -47,9 +47,9 @@ module Msf
               'EnableUnicodeEncoding',
               [true, "Automatically encode UTF-8 strings as hexadecimal", Rex::Compat.is_windows]
             ),
-            OptPath.new(
+            OptString.new(
               'HandlerSSLCert',
-              [false, "Path to a SSL certificate in unified PEM format, ignored for HTTP transports"]
+              [false, "Path to unified PEM SSL cert OR SHA1 hash OR HTTPS URL (ignored for HTTP).", '']
             ),
             OptInt.new(
               'SessionRetryTotal',
