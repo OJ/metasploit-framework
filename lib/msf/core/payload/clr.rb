@@ -19,6 +19,15 @@ module Msf::Payload::Clr
   end
 
   #
+  # We don't have intermediate stages for the CLR payloads, so we are just
+  # going to return the length of the full stage.
+  #
+  def handle_intermediate_stage(conn, payload)
+    conn.put([payload.length].pack('V'))
+    return false
+  end
+
+  #
   # This mixin is chained within payloads that target the CRL.
   # It provides special variable substitution for things like CLRVERSION.
   #
