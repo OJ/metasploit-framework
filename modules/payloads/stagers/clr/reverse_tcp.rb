@@ -5,6 +5,8 @@
 
 require 'msf/core/handler/reverse_tcp'
 require 'msf/core/payload/clr/reverse_tcp'
+require 'msf/base/sessions/command_shell'
+require 'msf/base/sessions/command_shell_options'
 
 module MetasploitModule
 
@@ -16,14 +18,13 @@ module MetasploitModule
   def initialize(info = {})
     super(merge_info(info,
       'Name'        => 'Reverse TCP Stager',
-      'Description' => 'Connect back to the attacker (Windows CLR)',
+      'Description' => 'Connect back to the attacker (CLR)',
       'Author'      => ['OJ Reeves'],
       'License'     => MSF_LICENSE,
-      'Platform'    => 'win',
-      'Arch'        => ARCH_X86,
+      'Platform'    => 'clr',
+      'Arch'        => ARCH_CLR,
       'Handler'     => Msf::Handler::ReverseTcp,
-      'Convention'  => '',
-      'Stager'      => {'RequiresMidstager' => false}
+      'Stager'      => {}
     ))
   end
 end

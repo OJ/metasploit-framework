@@ -549,6 +549,14 @@ class Msf::Module::Platform
   end
 
   #
+  # CLR
+  #
+  class Clr < Msf::Module::Platform
+    Rank = 100
+    Alias = "clr"
+  end
+
+  #
   # Node.js
   #
   class NodeJS < Msf::Module::Platform

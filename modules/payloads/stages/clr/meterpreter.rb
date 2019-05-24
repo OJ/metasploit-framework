@@ -4,7 +4,7 @@
 ##
 
 require 'msf/core/payload/clr/meterpreter_loader'
-require 'msf/base/sessions/meterpreter_clr_win'
+require 'msf/base/sessions/meterpreter_clr_clr'
 require 'msf/base/sessions/meterpreter_options'
 
 ###
@@ -25,8 +25,10 @@ module MetasploitModule
       'Description'   => 'Inject the meterpreter server DLL via Assembly.Load() into the currently running CLR instance',
       'Author'        => ['OJ Reeves'],
       'PayloadCompat' => {},
+      'Platform'      => 'clr',
+      'Arch'          => ARCH_CLR,
       'License'       => MSF_LICENSE,
-      'Session'       => Msf::Sessions::Meterpreter_Clr_Win
+      'Session'       => Msf::Sessions::Meterpreter_Clr_Clr
     ))
   end
 end

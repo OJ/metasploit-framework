@@ -44,7 +44,8 @@ class Msf::Payload::UUID
     25 => ARCH_MIPS64,
     26 => ARCH_PPC64LE,
     27 => ARCH_R,
-    28 => ARCH_PPCE500V2
+    28 => ARCH_PPCE500V2,
+    29 => ARCH_CLR
   }
 
   Platforms = {
@@ -76,6 +77,8 @@ class Msf::Payload::UUID
     25 => 'apple_ios',
     26 => 'juniper',
     27 => 'unifi',
+    28 => 'ppce500v2',
+    29 => 'clr',
   }
 
   # The raw length of the UUID structure

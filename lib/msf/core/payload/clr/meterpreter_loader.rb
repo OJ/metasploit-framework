@@ -24,8 +24,8 @@ module Payload::Clr::MeterpreterLoader
       'References'    => [
         [ 'URL', 'https://github.com/OJ/clr-meterpreter' ] # History of the payload
       ],
-      'Platform'      => 'win',
-      'Arch'          => ARCH_X86, # TODO: change this to ARCH_CLR
+      'Platform'      => 'clr',
+      'Arch'          => ARCH_CLR,
       'PayloadCompat' => {},
       'Stage'         => {}
       ))
