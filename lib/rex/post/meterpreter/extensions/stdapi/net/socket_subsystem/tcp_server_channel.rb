@@ -34,7 +34,7 @@ class TcpServerChannel < Rex::Post::Meterpreter::Channel
   # These new tcp client channels are passed off via a call the the tcp server channels accept() method.
   #
   def self.request_handler(client, packet)
-    return false unless packet.method == "tcp_channel_open"
+    return false unless packet.method == "stdapi_tcp_channel_open"
 
     cid       = packet.get_tlv_value( TLV_TYPE_CHANNEL_ID )
     pid       = packet.get_tlv_value( TLV_TYPE_CHANNEL_PARENTID )

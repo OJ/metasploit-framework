@@ -54,6 +54,7 @@ TLV_TYPE_METHOD              = TLV_META_TYPE_STRING |   1
 TLV_TYPE_REQUEST_ID          = TLV_META_TYPE_STRING |   2
 TLV_TYPE_EXCEPTION           = TLV_META_TYPE_GROUP  |   3
 TLV_TYPE_RESULT              = TLV_META_TYPE_UINT   |   4
+TLV_TYPE_METHOD_ID           = TLV_META_TYPE_UINT   |   5
 
 
 TLV_TYPE_STRING              = TLV_META_TYPE_STRING |  10
@@ -136,6 +137,260 @@ LOAD_LIBRARY_FLAG_LOCAL     = (1 << 2)
 GUID_SIZE = 16
 NULL_GUID = "\x00" * GUID_SIZE
 
+#
+# Mapping for command strings to and from IDs
+#
+METHOD_LIST = {
+  'core_channel_close' =>  1000,
+  'core_channel_eof' =>  1001,
+  'core_channel_interact' =>  1002,
+  'core_channel_open' =>  1003,
+  'core_channel_read' =>  1004,
+  'core_channel_seek' =>  1005,
+  'core_channel_tell' =>  1006,
+  'core_channel_write' =>  1007,
+  'core_console_write' =>  1008,
+  'core_enumextcmd' =>  1009,
+  'core_get_session_guid' =>  1010,
+  'core_loadlib' =>  1011,
+  'core_machine_id' =>  1012,
+  'core_migrate' =>  1013,
+  'core_native_arch' =>  1014,
+  'core_negotiate_tlv_encryption' =>  1015,
+  'core_patch_url' =>  1016,
+  'core_pivot_add' =>  1017,
+  'core_pivot_remove' =>  1018,
+  'core_pivot_session_died' =>  1019,
+  'core_pivot_session_new' =>  1020,
+  'core_set_session_guid' =>  1021,
+  'core_set_uuid' =>  1022,
+  'core_shutdown' =>  1023,
+  'core_transport_add' =>  1024,
+  'core_transport_change' =>  1025,
+  'core_transport_getcerthash' =>  1026,
+  'core_transport_list' =>  1027,
+  'core_transport_next' =>  1028,
+  'core_transport_prev' =>  1029,
+  'core_transport_remove' =>  1030,
+  'core_transport_set_timeouts' =>  1031,
+  'core_transport_setcerthash' =>  1032,
+  'core_transport_sleep' =>  1033,
+
+  'stdapi_audio_mic_list' =>  2000,
+  'stdapi_audio_mic_start' =>  2001,
+  'stdapi_audio_mic_stop' =>  2002,
+  'stdapi_fs_chdir' =>  2003,
+  'stdapi_fs_chmod' =>  2004,
+  'stdapi_fs_delete_dir' =>  2005,
+  'stdapi_fs_delete_file' =>  2006,
+  'stdapi_fs_file_copy' =>  2007,
+  'stdapi_fs_file_expand_path' =>  2008,
+  'stdapi_fs_file_move' =>  2009,
+  'stdapi_fs_getwd' =>  2010,
+  'stdapi_fs_ls' =>  2011,
+  'stdapi_fs_md5' =>  2012,
+  'stdapi_fs_mkdir' =>  2013,
+  'stdapi_fs_mount_show' =>  2014,
+  'stdapi_fs_search' =>  2015,
+  'stdapi_fs_separator' =>  2016,
+  'stdapi_fs_sha1' =>  2017,
+  'stdapi_fs_stat' =>  2018,
+  'stdapi_net_config_add_route' =>  2019,
+  'stdapi_net_config_get_arp_table' =>  2020,
+  'stdapi_net_config_get_interfaces' =>  2021,
+  'stdapi_net_config_get_netstat' =>  2022,
+  'stdapi_net_config_get_proxy' =>  2023,
+  'stdapi_net_config_get_routes' =>  2024,
+  'stdapi_net_config_remove_route' =>  2025,
+  'stdapi_net_resolve_host' =>  2026,
+  'stdapi_net_resolve_hosts' =>  2027,
+  'stdapi_net_socket_tcp_shutdown' =>  2028,
+  'stdapi_railgun_api' =>  2029,
+  'stdapi_railgun_api_multi' =>  2030,
+  'stdapi_railgun_memread' =>  2031,
+  'stdapi_railgun_memwrite' =>  2032,
+  'stdapi_registry_check_key_exists' =>  2033,
+  'stdapi_registry_close_key' =>  2034,
+  'stdapi_registry_create_key' =>  2035,
+  'stdapi_registry_delete_key' =>  2036,
+  'stdapi_registry_delete_value' =>  2037,
+  'stdapi_registry_enum_key' =>  2038,
+  'stdapi_registry_enum_key_direct' =>  2039,
+  'stdapi_registry_enum_value' =>  2040,
+  'stdapi_registry_enum_value_direct' =>  2041,
+  'stdapi_registry_load_key' =>  2042,
+  'stdapi_registry_open_key' =>  2043,
+  'stdapi_registry_open_remote_key' =>  2044,
+  'stdapi_registry_query_class' =>  2045,
+  'stdapi_registry_query_value' =>  2046,
+  'stdapi_registry_query_value_direct' =>  2047,
+  'stdapi_registry_set_value' =>  2048,
+  'stdapi_registry_set_value_direct' =>  2049,
+  'stdapi_registry_unload_key' =>  2050,
+  'stdapi_sys_config_driver_list' =>  2051,
+  'stdapi_sys_config_drop_token' =>  2052,
+  'stdapi_sys_config_getenv' =>  2053,
+  'stdapi_sys_config_getprivs' =>  2054,
+  'stdapi_sys_config_getsid' =>  2055,
+  'stdapi_sys_config_getuid' =>  2056,
+  'stdapi_sys_config_localtime' =>  2057,
+  'stdapi_sys_config_rev2self' =>  2058,
+  'stdapi_sys_config_steal_token' =>  2059,
+  'stdapi_sys_config_sysinfo' =>  2060,
+  'stdapi_sys_eventlog_clear' =>  2061,
+  'stdapi_sys_eventlog_close' =>  2062,
+  'stdapi_sys_eventlog_numrecords' =>  2063,
+  'stdapi_sys_eventlog_oldest' =>  2064,
+  'stdapi_sys_eventlog_open' =>  2065,
+  'stdapi_sys_eventlog_read' =>  2066,
+  'stdapi_sys_power_exitwindows' =>  2067,
+  'stdapi_sys_process_attach' =>  2068,
+  'stdapi_sys_process_close' =>  2069,
+  'stdapi_sys_process_execute' =>  2070,
+  'stdapi_sys_process_get_info' =>  2071,
+  'stdapi_sys_process_get_processes' =>  2072,
+  'stdapi_sys_process_getpid' =>  2073,
+  'stdapi_sys_process_image_get_images' =>  2074,
+  'stdapi_sys_process_image_get_proc_address' =>  2075,
+  'stdapi_sys_process_image_load' =>  2076,
+  'stdapi_sys_process_image_unload' =>  2077,
+  'stdapi_sys_process_kill' =>  2078,
+  'stdapi_sys_process_memory_allocate' =>  2079,
+  'stdapi_sys_process_memory_free' =>  2080,
+  'stdapi_sys_process_memory_lock' =>  2081,
+  'stdapi_sys_process_memory_protect' =>  2082,
+  'stdapi_sys_process_memory_query' =>  2083,
+  'stdapi_sys_process_memory_read' =>  2084,
+  'stdapi_sys_process_memory_unlock' =>  2085,
+  'stdapi_sys_process_memory_write' =>  2086,
+  'stdapi_sys_process_thread_close' =>  2087,
+  'stdapi_sys_process_thread_create' =>  2088,
+  'stdapi_sys_process_thread_get_threads' =>  2089,
+  'stdapi_sys_process_thread_open' =>  2090,
+  'stdapi_sys_process_thread_query_regs' =>  2091,
+  'stdapi_sys_process_thread_resume' =>  2092,
+  'stdapi_sys_process_thread_set_regs' =>  2093,
+  'stdapi_sys_process_thread_suspend' =>  2094,
+  'stdapi_sys_process_thread_terminate' =>  2095,
+  'stdapi_sys_process_wait' =>  2096,
+  'stdapi_tcp_channel_open' =>  2097,
+  'stdapi_ui_desktop_enum' =>  2098,
+  'stdapi_ui_desktop_get' =>  2099,
+  'stdapi_ui_desktop_screenshot' =>  2100,
+  'stdapi_ui_desktop_set' =>  2101,
+  'stdapi_ui_enable_keyboard' =>  2102,
+  'stdapi_ui_enable_mouse' =>  2103,
+  'stdapi_ui_get_idle_time' =>  2104,
+  'stdapi_ui_get_keys' =>  2105,
+  'stdapi_ui_get_keys_utf8' =>  2106,
+  'stdapi_ui_send_keys' =>  2107,
+  'stdapi_ui_send_mouse' =>  2108,
+  'stdapi_ui_start_keyscan' =>  2109,
+  'stdapi_ui_stop_keyscan' =>  2110,
+  'stdapi_ui_unlock_desktop' =>  2111,
+  'stdapi_webcam_audio_record' =>  2112,
+  'stdapi_webcam_get_frame' =>  2113,
+  'stdapi_webcam_list' =>  2114,
+  'stdapi_webcam_start' =>  2115,
+  'stdapi_webcam_stop' =>  2116,
+
+  'priv_elevate_getsystem' =>  3000,
+  'priv_fs_blank_directory_mace' =>  3001,
+  'priv_fs_blank_file_mace' =>  3002,
+  'priv_fs_get_file_mace' =>  3003,
+  'priv_fs_set_file_mace' =>  3004,
+  'priv_fs_set_file_mace_from_file' =>  3005,
+  'priv_passwd_get_sam_hashes' =>  3006,
+
+  'extapi_adsi_domain_query' =>  4000,
+  'extapi_clipboard_get_data' =>  4001,
+  'extapi_clipboard_monitor_dump' =>  4002,
+  'extapi_clipboard_monitor_pause' =>  4003,
+  'extapi_clipboard_monitor_purge' =>  4004,
+  'extapi_clipboard_monitor_resume' =>  4005,
+  'extapi_clipboard_monitor_start' =>  4006,
+  'extapi_clipboard_monitor_stop' =>  4007,
+  'extapi_clipboard_set_data' =>  4008,
+  'extapi_ntds_parse' =>  4009,
+  'extapi_pageant_send_query' =>  4010,
+  'extapi_service_control' =>  4011,
+  'extapi_service_enum' =>  4012,
+  'extapi_service_query' =>  4013,
+  'extapi_window_enum' =>  4014,
+  'extapi_wmi_query' =>  4015,
+
+  'incognito_add_group_user' =>  5000,
+  'incognito_add_localgroup_user' =>  5001,
+  'incognito_add_user' =>  5002,
+  'incognito_impersonate_token' =>  5003,
+  'incognito_list_tokens' =>  5004,
+  'incognito_snarf_hashes' =>  5005,
+
+  'kiwi_exec_cmd' =>  6000,
+
+  'android_activity_start' =>  7000,
+  'android_check_root' =>  7001,
+  'android_device_shutdown' =>  7002,
+  'android_dump_calllog' =>  7003,
+  'android_dump_contacts' =>  7004,
+  'android_dump_sms' =>  7005,
+  'android_geolocate' =>  7006,
+  'android_hide_app_icon' =>  7007,
+  'android_interval_collect' =>  7008,
+  'android_send_sms' =>  7009,
+  'android_set_audio_mode' =>  7010,
+  'android_set_wallpaper' =>  7011,
+  'android_sqlite_query' =>  7012,
+  'android_wakelock' =>  7013,
+  'android_wlan_geolocate' =>  7014,
+
+  'appapi_app_install' =>  8000,
+  'appapi_app_list' =>  8001,
+  'appapi_app_run' =>  8002,
+  'appapi_app_uninstall' =>  8003,
+
+  'dump_ram' =>  9000,
+
+  'espia_audio_get_dev_audio' =>  10000,
+  'espia_image_get_dev_screen' =>  10001,
+  'espia_video_get_dev_image' =>  10002,
+
+  'lanattacks_add_tftp_file' =>  11000,
+  'lanattacks_dhcp_log' =>  11001,
+  'lanattacks_reset_dhcp' =>  11002,
+  'lanattacks_reset_tftp' =>  11003,
+  'lanattacks_set_dhcp_option' =>  11004,
+  'lanattacks_start_dhcp' =>  11005,
+  'lanattacks_start_tftp' =>  11006,
+  'lanattacks_stop_dhcp' =>  11007,
+  'lanattacks_stop_tftp' =>  11008,
+
+  'mimikatz_custom_command' =>  12000,
+
+  'networkpug_start' =>  13000,
+  'networkpug_stop' =>  13001,
+
+  'peinjector_inject_shellcode' =>  14000,
+
+  'powershell_assembly_load' =>  15000,
+  'powershell_execute' =>  15001,
+  'powershell_session_remove' =>  15002,
+  'powershell_shell' =>  15003,
+
+  'python_execute' =>  16000,
+  'python_reset' =>  16001,
+
+  'sniffer_capture_dump' =>  17000,
+  'sniffer_capture_dump_read' =>  17001,
+  'sniffer_capture_release' =>  17002,
+  'sniffer_capture_start' =>  17003,
+  'sniffer_capture_stats' =>  17004,
+  'sniffer_capture_stop' =>  17005,
+  'sniffer_interfaces' =>  17006,
+
+  'unhook_pe' =>  18000,
+}
+
 ###
 #
 # Base TLV (Type-Length-Value) class
@@ -190,6 +445,7 @@ class Tlv
       when PACKET_TYPE_RESPONSE; "Response"
       when TLV_TYPE_REQUEST_ID; "REQUEST-ID"
       when TLV_TYPE_METHOD; "METHOD"
+      when TLV_TYPE_METHOD_ID; "METHOD-ID"
       when TLV_TYPE_RESULT; "RESULT"
       when TLV_TYPE_EXCEPTION; "EXCEPTION"
       when TLV_TYPE_STRING; "STRING"
@@ -700,6 +956,10 @@ class Packet < GroupTlv
     Packet.new(PACKET_TYPE_REQUEST, method)
   end
 
+  def Packet.method_ids_to_names(methods)
+    methods.map { |i| METHOD_LIST.key(i) }
+  end
+
   #
   # Creates a response to a request if one is provided.
   #
@@ -907,22 +1167,22 @@ class Packet < GroupTlv
   #
   # Checks to see if the packet's method is equal to the supplied method.
   #
-  def method?(method)
-    return (get_tlv_value(TLV_TYPE_METHOD) == method)
+  def method?(method_name)
+    return (method == method_name)
   end
 
   #
   # Sets the packet's method TLV to the method supplied.
   #
-  def method=(method)
-    add_tlv(TLV_TYPE_METHOD, method, true)
+  def method=(method_name)
+    add_tlv(TLV_TYPE_METHOD_ID, METHOD_LIST[method_name], true)
   end
 
   #
   # Returns the value of the packet's method TLV.
   #
   def method
-    return get_tlv_value(TLV_TYPE_METHOD)
+    return METHOD_LIST.key(get_tlv_value(TLV_TYPE_METHOD_ID))
   end
 
   #
