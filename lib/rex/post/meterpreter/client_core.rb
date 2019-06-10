@@ -295,7 +295,7 @@ class ClientCore < Extension
     end
 
     commands = []
-    response.each(TLV_TYPE_METHOD) { |c|
+    response.each(TLV_TYPE_STRING) { |c|
       commands << c.value
     }
 
