@@ -10,11 +10,11 @@ module Sessions
 # This class creates a platform-specific meterpreter session type
 #
 ###
-class Meterpreter_Clr_Clr < Msf::Sessions::Meterpreter
+class Meterpreter_Clr2 < Msf::Sessions::Meterpreter
   def initialize(rstream, opts={})
     super
-    self.base_platform = 'clr'
-    self.base_arch = ARCH_CLR
+    self.base_platform = 'windows'
+    self.base_arch = ARCH_CLR2
   end
 
   def supports_ssl?
@@ -22,7 +22,7 @@ class Meterpreter_Clr_Clr < Msf::Sessions::Meterpreter
   end
   
   def binary_suffix
-    ["net35.dll"] # TODO: support different framework version
+    ["net35.dll"]
   end
 
   # TODO: remove this once we've supported ZLIB

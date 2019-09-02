@@ -3,8 +3,8 @@
 # Current source: https://github.com/rapid7/metasploit-framework
 ##
 
-require 'msf/core/payload/clr/meterpreter_loader'
-require 'msf/base/sessions/meterpreter_clr_clr'
+require 'msf/core/payload/clr2/meterpreter_loader'
+require 'msf/base/sessions/meterpreter_clr2'
 require 'msf/base/sessions/meterpreter_options'
 
 ###
@@ -16,7 +16,7 @@ require 'msf/base/sessions/meterpreter_options'
 
 module MetasploitModule
 
-  include Msf::Payload::Clr::MeterpreterLoader
+  include Msf::Payload::Clr2::MeterpreterLoader
   include Msf::Sessions::MeterpreterOptions
 
   def initialize(info = {})
@@ -25,10 +25,10 @@ module MetasploitModule
       'Description'   => 'Inject the meterpreter server DLL via Assembly.Load() into the currently running CLR instance',
       'Author'        => ['OJ Reeves'],
       'PayloadCompat' => {},
-      'Platform'      => 'clr',
-      'Arch'          => ARCH_CLR,
+      'Platform'      => 'windows',
+      'Arch'          => ARCH_CLR2,
       'License'       => MSF_LICENSE,
-      'Session'       => Msf::Sessions::Meterpreter_Clr_Clr
+      'Session'       => Msf::Sessions::Meterpreter_Clr2
     ))
   end
 end

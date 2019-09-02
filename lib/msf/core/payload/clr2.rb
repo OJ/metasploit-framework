@@ -4,12 +4,12 @@ require 'msf/core'
 ###
 #
 # This class is here to implement advanced variable substitution
-# for CLR-based payloads, such as CLRVERSION.
+# for CLR-based payloads.
 #
 ###
-module Msf::Payload::Clr
+module Msf::Payload::Clr2
 
-  require 'msf/core/payload/clr/meterpreter_loader'
+  require 'msf/core/payload/clr2/meterpreter_loader'
 
   #
   # Implement payload prepends for Windows payloads
@@ -25,20 +25,6 @@ module Msf::Payload::Clr
   def handle_intermediate_stage(conn, payload)
     conn.put([payload.length].pack('V'))
     return false
-  end
-
-  #
-  # This mixin is chained within payloads that target the CRL.
-  # It provides special variable substitution for things like CLRVERSION.
-  #
-  def initialize(info = {})
-    ret = super(info)
-
-    register_options(
-      [
-        Msf::OptEnum.new('CLRVERSION', [true, 'Version of the CLR to target.', 'net35', ['net35', 'net40']])
-      ])
-    ret
   end
 
   #

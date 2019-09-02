@@ -1,20 +1,20 @@
 # -*- coding: binary -*-
 
 require 'msf/core'
-require 'msf/core/payload/clr'
+require 'msf/core/payload/clr4'
 require 'rex/payloads/meterpreter/config'
 
 module Msf
 
 ###
 #
-# Common module stub for ARCH_CLR payloads that make use of Meterpreter.
+# Common module stub for ARCH_CLR4 payloads that make use of Meterpreter.
 #
 ###
 
-module Payload::Clr::MeterpreterLoader
+module Payload::Clr4::MeterpreterLoader
 
-  include Msf::Payload::Clr
+  include Msf::Payload::Clr4
 
   def initialize(info = {})
     super(update_info(info,
@@ -24,8 +24,8 @@ module Payload::Clr::MeterpreterLoader
       'References'    => [
         [ 'URL', 'https://github.com/OJ/clr-meterpreter' ] # History of the payload
       ],
-      'Platform'      => 'clr',
-      'Arch'          => ARCH_CLR,
+      'Platform'      => 'windows',
+      'Arch'          => ARCH_CLR4,
       'PayloadCompat' => {},
       'Stage'         => {}
       ))
@@ -60,7 +60,7 @@ module Payload::Clr::MeterpreterLoader
 
   def stage_meterpreter(opts={})
     ds = opts[:datastore] || datastore
-    path = MetasploitPayloads.meterpreter_path('metsrv', "#{ds['CLRVERSION']}.dll")
+    path = MetasploitPayloads.meterpreter_path('metsrv', "net40.dll")
     assembly = ''
     ::File.open(path, 'rb') { |f| assembly = f.read }
 
