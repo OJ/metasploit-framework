@@ -62,7 +62,7 @@ module Payload::Clr2::ReverseTcp
   # Generate and compile the stager
   #
   def generate_reverse_tcp(opts={})
-    'THIS IS WHERE THE STAGER PAYLOAD GOES'
+    'THIS IS WHERE THE CLR2 TCP STAGER PAYLOAD GOES'
   end
 
   #

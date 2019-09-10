@@ -371,7 +371,7 @@ protected
         pkt.add_tlv(Rex::Post::Meterpreter::TLV_TYPE_TRANS_URL, conn_id + "/")
         resp.body = pkt.to_r
 
-      when :init_python, :init_native, :init_java, :connect
+      when :init_python, :init_native, :init_java, :init_clr2, :connect
         # TODO: at some point we may normalise these three cases into just :init
 
         if info[:mode] == :connect

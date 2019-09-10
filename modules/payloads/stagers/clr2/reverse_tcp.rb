@@ -21,7 +21,7 @@ module MetasploitModule
       'Description' => 'Connect back to the attacker (CLR)',
       'Author'      => ['OJ Reeves'],
       'License'     => MSF_LICENSE,
-      'Platform'    => 'windows',
+      'Platform'    => 'win',
       'Arch'        => ARCH_CLR2,
       'Handler'     => Msf::Handler::ReverseTcp,
       'Stager'      => {}
