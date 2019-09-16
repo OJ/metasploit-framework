@@ -12,10 +12,10 @@ module Msf
 #
 ###
 
-module Payload::Clr2::ReverseHttp
+module Payload::Clr4::ReverseHttp
 
   include Msf::Payload::TransportConfig
-  include Msf::Payload::Clr2
+  include Msf::Payload::Clr4
   include Msf::Payload::UUID::Options
 
   #
@@ -83,7 +83,7 @@ module Payload::Clr2::ReverseHttp
   # Generate and compile the stager
   #
   def generate_reverse_http(opts={})
-    'THIS IS WHERE THE CLR2 HTTP STAGER PAYLOAD GOES'
+    #'THIS IS WHERE THE CLR4 HTTP STAGER PAYLOAD GOES'
     generate_uri(opts)
   end
 
@@ -110,14 +110,14 @@ module Payload::Clr2::ReverseHttp
       raise ArgumentError, "Minimum StagerURILength is 5"
     end
 
-    generate_uri_uuid_mode(:init_clr2, uri_req_len)
+    generate_uri_uuid_mode(:init_clr4, uri_req_len)
   end
 
   #
   # Generate the URI for the initial stager
   #
   def generate_small_uri
-    generate_uri_uuid_mode(:init_clr2, 30)
+    generate_uri_uuid_mode(:init_clr4, 30)
   end
 
   #
