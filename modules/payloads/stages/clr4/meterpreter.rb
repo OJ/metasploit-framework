@@ -25,7 +25,7 @@ module MetasploitModule
       'Description'   => 'Inject the meterpreter server DLL via Assembly.Load() into the currently running CLR instance',
       'Author'        => ['OJ Reeves'],
       'PayloadCompat' => {},
-      'Platform'      => 'windows',
+      'Platform'      => 'win',
       'Arch'          => ARCH_CLR4,
       'License'       => MSF_LICENSE,
       'Session'       => Msf::Sessions::Meterpreter_Clr4

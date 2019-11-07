@@ -37,7 +37,7 @@ module Msf::Payload::TransportConfig
     ds = opts[:datastore] || datastore
     {
       scheme: 'tcp',
-      lhost:  ds['LHOST'],
+      lhost:  '', # make sure this is blank, it's important!
       lport:  ds['LPORT'].to_i
     }.merge(timeout_config(opts))
   end
