@@ -892,8 +892,7 @@ class Console::CommandDispatcher::Core
   def update_transport_map
     result = client.core.transport_list
     @transport_map.clear
-    sorted_by_url = result[:transports].sort_by { |k| k[:url] }
-    sorted_by_url.each_with_index { |t, i| @transport_map[i+1] = t }
+    result[:transports].each_with_index { |t, i| @transport_map[i+1] = t }
   end
 
   #
@@ -990,8 +989,6 @@ class Console::CommandDispatcher::Core
 
       current_transport_url = result[:transports].first[:url]
 
-      sorted_by_url = result[:transports].sort_by { |k| k[:url] }
-
       # this will output the session timeout first
       print_timeouts(result)
 
@@ -1011,7 +1008,7 @@ class Console::CommandDispatcher::Core
         'Indent'    => 4,
         'Columns'   => columns)
 
-      sorted_by_url.each_with_index do |t, i|
+      result[:transports].each_with_index do |t, i|
         entry = [i + 1, current_transport_url == t[:url] ? '*' : '', t[:url],
                   t[:comm_timeout], t[:retry_total], t[:retry_wait]]
 
