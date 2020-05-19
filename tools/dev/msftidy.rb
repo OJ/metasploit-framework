@@ -178,7 +178,7 @@ class Msftidy
         when 'US-CERT-VU'
           warn("Invalid US-CERT-VU reference") if value !~ /^\d+$/
         when 'ZDI'
-          warn("Invalid ZDI reference") if value !~ /^\d{2}-\d{3}$/
+          warn("Invalid ZDI reference") if value !~ /^\d{2}-\d{3,4}$/
         when 'WPVDB'
           warn("Invalid WPVDB reference") if value !~ /^\d+$/
         when 'PACKETSTORM'
@@ -377,6 +377,12 @@ class Msftidy
   def check_extname
     if File.extname(@name) != '.rb'
       error("Module should be a '.rb' file, or it won't load.")
+    end
+  end
+
+  def check_executable
+    if File.executable?(@full_filepath)
+      error("Module should not be executable (+x)")
     end
   end
 
@@ -728,6 +734,7 @@ class Msftidy
     check_verbose_option
     check_badchars
     check_extname
+    check_executable
     check_old_rubies
     check_ranking
     check_disclosure_date

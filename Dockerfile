@@ -1,4 +1,4 @@
-FROM ruby:2.6.2-alpine3.9 AS builder
+FROM ruby:2.6.6-alpine3.10 AS builder
 LABEL maintainer="Rapid7"
 
 ARG BUNDLER_ARGS="--jobs=8 --without development test coverage"
@@ -27,16 +27,16 @@ RUN apk add --no-cache \
       zlib-dev \
       ncurses-dev \
       git \
-    && echo "gem: --no-ri --no-rdoc" > /etc/gemrc \
-    && gem update --system \
-    && bundle install --clean --no-cache --system $BUNDLER_ARGS \
+    && echo "gem: --no-document" > /etc/gemrc \
+    && gem update --system 3.0.6 \
+    && bundle install --force --clean --no-cache --system $BUNDLER_ARGS \
     # temp fix for https://github.com/bundler/bundler/issues/6680
     && rm -rf /usr/local/bundle/cache \
     # needed so non root users can read content of the bundle
     && chmod -R a+r /usr/local/bundle
 
 
-FROM ruby:2.6.2-alpine3.9
+FROM ruby:2.6.5-alpine3.10
 LABEL maintainer="Rapid7"
 
 ENV APP_HOME=/usr/src/metasploit-framework

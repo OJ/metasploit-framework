@@ -320,9 +320,11 @@ module PacketDispatcher
         incomplete = []
         backlog    = []
 
-        backlog << @pqueue.pop
+        # Note: this first call to pqueue.pop is important. If the Queue is empty, this
+        # calling thread is suspended until data is pushed onto the queue.
+        backlog << decrypt_inbound_packet(@pqueue.pop)
         while(@pqueue.length > 0)
-          backlog << @pqueue.pop
+          backlog << decrypt_inbound_packet(@pqueue.pop)
         end
 
         #
@@ -429,11 +431,13 @@ module PacketDispatcher
   def monitor_stop
     if self.receiver_thread
       self.receiver_thread.kill
+      self.receiver_thread.join
       self.receiver_thread = nil
     end
 
     if self.dispatcher_thread
       self.dispatcher_thread.kill
+      self.dispatcher_thread.join
       self.dispatcher_thread = nil
     end
   end
@@ -505,6 +509,18 @@ module PacketDispatcher
   end
 
   #
+  # Decrypt the given packet with the appropriate key depending on
+  # if this session is a pivot session or not.
+  #
+  def decrypt_inbound_packet(packet)
+    pivot_session = self.find_pivot_session(packet.session_guid)
+    tlv_enc_key = self.tlv_enc_key
+    tlv_enc_key = pivot_session.pivoted_session.tlv_enc_key if pivot_session
+    packet.from_r(tlv_enc_key)
+    packet
+  end
+
+  #
   # Dispatches and processes an inbound packet.  If the packet is a
   # response that has an associated waiter, the waiter is notified.
   # Otherwise, the packet is passed onto any registered dispatch
@@ -513,15 +529,10 @@ module PacketDispatcher
   def dispatch_inbound_packet(packet)
     handled = false
 
-    pivot_session = self.find_pivot_session(packet.session_guid)
-
-    tlv_enc_key = self.tlv_enc_key
-    tlv_enc_key = pivot_session.pivoted_session.tlv_enc_key if pivot_session
-
-    packet.from_r(tlv_enc_key)
-
     # Update our last reply time
     self.last_checkin = Time.now
+
+    pivot_session = self.find_pivot_session(packet.session_guid)
     pivot_session.pivoted_session.last_checkin = self.last_checkin if pivot_session
 
     # If the packet is a response, try to notify any potential
@@ -630,6 +641,7 @@ module HttpPacketDispatcher
         packet = Packet.new(0)
         packet.add_raw(req.body)
         packet.parse_header!
+        packet = decrypt_inbound_packet(packet)
         dispatch_inbound_packet(packet)
       end
       cli.send_response(resp)
